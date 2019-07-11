@@ -1,0 +1,51 @@
+﻿@model WebApiClassV2.Models.AFElementSearchResults.RootObject
+@{
+    ViewData["Title"] = "AFSearch";
+}
+
+
+@if (Model == null)
+{
+    <h2 style="text-align:center">AF Element Search</h2>
+    <br /><br />
+    <div class="container">
+        @using (Html.BeginForm())
+        {
+            <div class="row">
+                <div class="col-md-offset-4">
+                    <label class="control-label col-md-2" style="text-align:right">Search Query: (try "network")</label>
+                    <span class="col-md-2">
+
+                        @Html.TextBox("searchEntry")
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2 col-md-offset-5">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h2 style="text-align:center">Search Results</h2>
+    <br /><br />
+  
+    <table class="table table-condensed table-striped" align="center" style="width:25%;text-align:center;">
+        <thead>
+            <tr>
+                <th scope="col" style="text-align:center">Elements</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td scope="col">
+                        @Html.ActionLink(item.Name, "AttributeView", null, new { elementID = item.WebId })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

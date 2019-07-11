@@ -1,0 +1,26 @@
+﻿@model WebApiClassV2.Models.AFAttributeList.RootObject
+
+@{
+    ViewData["Title"] = "AttributeView";
+}
+
+<h2 style="text-align:center">Attribute View</h2>
+
+<br /><br />
+<table class="table table-condensed table-striped" align="center" style="width:25%">
+    <thead>
+        <tr>
+            <th style="text-align:center">Attributes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td style="text-align:center">
+                    @Html.ActionLink(item.Name, "ViewAttribData", null, new { attribName = item.Name, attribWebID = item.WebId, plotdatalink = item.Links.PlotData })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

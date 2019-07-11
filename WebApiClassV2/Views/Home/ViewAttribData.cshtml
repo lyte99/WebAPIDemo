@@ -1,0 +1,86 @@
+﻿@model WebApiClassV2.Models.AFAttributeRecordedValues.RootObject
+@{
+    ViewData["Title"] = "ViewAttribData";
+    string attribWebID = @ViewBag.attribWebID;
+    string attribName = @ViewBag.attribName;
+}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+
+
+    google.charts.load('current', { packages: ['corechart', 'line'] });
+    google.charts.setOnLoadCallback(drawBasic);
+
+    function drawBasic() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'X');
+        data.addColumn('number', '@attribName');
+
+        data.addRows([
+              @foreach (var line in Model.Items)
+              {
+                  @if(!line.Value.ToString().ToUpper().Contains("DATA"))
+                  {
+                      @Html.Raw("['" + line.Timestamp+ "', " + line.Value + "],");
+                  }
+
+              }
+
+        ]);
+
+        var options = {
+            hAxis: {
+                title: 'Timestamp'
+            },
+            vAxis: {
+                title: '@Model.Items.FirstOrDefault().UnitsAbbreviation'
+            }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+    }
+</script>
+
+
+<h2 style="text-align:center">Attribute Data For @ViewBag.attribName</h2>
+<h3 style="text-align:center">For @Model.Items.First().Timestamp To: @Model.Items.Last().Timestamp</h3>
+
+<div id="chart_div"></div>
+
+<br /><br />
+<hr />
+<h4 style="text-align:center">Change Date Range:</h4>
+<div>
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md-offset-4">
+                <label class="control-label col-md-2" style="text-align:right">Start Time:</label>
+                <span class="col-md-2">
+
+                    @Html.TextBox("startTime")
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-4">
+                <label class="control-label col-md-2" style="text-align:right">End Time:</label>
+                <span class="col-md-2">
+
+                    @Html.TextBox("endTime")
+                </span>
+            </div>
+        </div>
+        <div><br /><br /></div>
+        <div class="col-md-2 col-md-offset-5">
+            @Html.Hidden("attribWebID", attribWebID)
+            @Html.Hidden("attribName", attribName)
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+    }
+</div>
+
